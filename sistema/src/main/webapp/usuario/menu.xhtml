@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:form id="AutorMenuForm">
+	<nav class="navbar navbar-default">
+	<div class="container-fluid">
+
+		<ul class="nav navbar-nav navbar-right">
+
+			<li>
+				<h:commandLink value="Pesquisar" styleClass="btn btn-default" action="/usuario/sel.xhtml">
+				</h:commandLink>
+			</li>
+				
+			<li>
+				<h:commandLink value="Novo" styleClass="btn btn-default" action="/usuario/cad.xhtml">
+					<f:param name="novo" value="true"/>
+				</h:commandLink>
+			</li>
+
+		</ul>
+		
+	</div>
+	</nav>
+</h:form>
+
+
+
+</html>

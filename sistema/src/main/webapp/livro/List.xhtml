@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="#{msg['ListLivroTitle']}"></h:outputText>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="LivroListForm">
+
+			<ui:include src="menu.xhtml">
+				<ui:param name="nomeTela" value="Pesquisa de Livros" />
+				
+				<ui:param name="inibeGravar" value="true" />
+				<ui:param name="inibeCancelar" value="true" />
+				<ui:param name="inibeExcluir" value="true" />
+			</ui:include>
+
+			<div>
+				<h:messages id="MessagesLivroListForm"
+					style=" list-style: none; padding-left:0;"
+					errorClass="alert alert-danger" infoClass="alert alert-success"
+					fatalClass="alert alert-danger" warnClass="alert alert-warning"
+					globalOnly="true" />
+			</div>
+
+			<div class="panel panel-default">
+
+				<div class="panel-body">
+					<div class="form-inline">
+						<div class="form-group">
+							<h:outputLabel value="Nome:" for="txtNome" />
+							<h:inputText value="#{livroController.entityPesquisar.titulo}"
+								onkeyup="if (event.keyCode == 13) { $('#LivroListForm\\:btPesquisar').click() }"
+								label="Nome" alt="nome" id="txtNome" title="nome do livro"
+								styleClass="form-control" tabindex="0" />
+						</div>
+
+						<div class="form-group">
+							<h:outputLabel value="Email:" for="txtEmail" />
+							<h:inputText value="#{livroController.entityPesquisar.isbn}"
+								onkeypress="if (event.keyCode == 13) { $('#LivroListForm\\:btPesquisar').click() }"
+								label="Email" alt="email" id="txtEmail" title="email do livro"
+								styleClass="form-control" tabindex="1" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="table-responsive">
+
+				<h:dataTable columnClasses="verticalAlignMiddle, verticalAlignMiddle, verticalAlignMiddle, verticalAlignMiddle"
+					styleClass="table table-bordered table-striped table-hover"
+					id="datalist" value="#{livroController.items}" var="item">
+
+					<f:facet name="header">
+
+						<h:panelGroup styleClass="col-xs-12" style="text-align: center"
+							rendered="#{not empty livroController.items}">
+							<div style="display: inline-block; vertical-align: middle;">
+								<ul class="pagination" style="float: left; margin-right: 10px">
+									<li class="paginate_button #{(livroController.currentPage gt 1 and livroController.totalPages gt 1) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{livroController.paginarPrimeira()}"
+											disabled="#{!(livroController.currentPage gt 1 and livroController.totalPages gt 1)}">
+											<i class="glyphicon glyphicon-fast-backward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink>
+									</li>
+									<li class="paginate_button #{(livroController.currentPage gt 1 and livroController.totalPages gt 1) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{livroController.paginarAnterior()}"
+											disabled="#{!(livroController.currentPage gt 1 and livroController.totalPages gt 1)}">
+											<i class="glyphicon glyphicon-backward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink>
+									</li>
+										
+								</ul>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+									<h:outputText value="Página" />
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+									<h:inputText id="currentPageTop" value="#{livroController.currentPage}"
+										size="2" autocomplete="off" styleClass="form-control"
+										onkeypress="if (event.keyCode == 13) {$('#LivroListForm\\:datalist\\:paginarTop').click(); return true;}" />
+									<h:commandLink id="paginarTop" action="#{livroController.pesquisar}" style="display:none">
+												<f:ajax execute="currentPageTop" render="@form" />
+											</h:commandLink>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+									<h:outputText value="de #{livroController.totalPages}" />
+							</div>
+
+							<div style="display: inline-block; vertical-align: middle;">
+								<ul class="pagination" style="float: left; margin-right: 10px">
+									<li class="paginate_button #{(livroController.currentPage lt livroController.totalPages) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{livroController.paginarProxima()}"
+											disabled="#{!(livroController.currentPage lt livroController.totalPages)}">
+											<i class="glyphicon glyphicon-forward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink></li>
+									<li class="paginate_button #{(livroController.currentPage lt livroController.totalPages) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{livroController.paginarUltima()}"
+											disabled="#{!(livroController.currentPage lt livroController.totalPages)}">
+											<i class="glyphicon glyphicon-fast-forward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink></li>
+								</ul>
+							</div>
+
+							<div style="display: inline-block; vertical-align: middle;">
+								<f:ajax event="change" listener="#{livroController.pesquisar()}"
+									render="@form">
+									<h:selectOneMenu value="#{livroController.pageSize}"
+										styleClass="form-control" style="width: 80px;">
+										<f:selectItem itemLabel="10" itemValue="10" />
+										<f:selectItem itemLabel="20" itemValue="20" />
+										<f:selectItem itemLabel="50" itemValue="50" />
+										<f:selectItem itemLabel="100" itemValue="100" />
+										<f:selectItem itemLabel="500" itemValue="500" />
+									</h:selectOneMenu>
+								</f:ajax>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+								<h5><small>&nbsp;#{livroController.totalRows} resultados encontrados</small></h5>
+							</div>
+						</h:panelGroup>
+					</f:facet>
+
+					<h:column rendered="false">
+						<h:selectBooleanCheckbox />
+						<i class="glyphicon glyphicon-trash"></i>
+					</h:column>
+
+					<h:column rendered="false">
+						<f:facet name="header">
+							<h:outputText value="#{msg['ListLivroTitle_id']}" />
+						</f:facet>
+						<h:outputText value="#{item.id}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['ListLivroTitle_titulo']}" />
+						</f:facet>
+						<h:outputText value="#{item.titulo}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['ListLivroTitle_isbn']}" />
+						</f:facet>
+						<h:outputText value="#{item.isbn}" />
+					</h:column>
+					
+					<h:column>
+						<h:commandLink id="btEditar"
+							immediate="true"							
+							action="#{livroController.iniciarEdicao(item.id)}"
+							styleClass="btn btn-default" style="margin-right:.2em;">
+							<i class="glyphicon glyphicon-edit"></i>
+						</h:commandLink>
+						
+						<h:commandLink id="btModal"
+							action="#{livroController.setSelected(item)}"
+							 immediate="true" styleClass="btn btn-default">
+							<i class="glyphicon glyphicon-zoom-in"></i>
+							<f:ajax onevent="showModalVisualizaLivro" execute="@this" render="LivroListForm:myModalContent" />
+						</h:commandLink>
+						
+					</h:column>
+
+					<f:facet name="footer">
+						<h:panelGroup styleClass="col-xs-12" style="text-align: center"
+							rendered="#{not empty livroController.items}">
+							<div style="display: inline-block; vertical-align: middle;">
+								<ul class="pagination" style="float: left; margin-right: 10px">
+									<li class="paginate_button #{(livroController.currentPage gt 1 and livroController.totalPages gt 1) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{livroController.paginarPrimeira()}"
+											disabled="#{!(livroController.currentPage gt 1 and livroController.totalPages gt 1)}">
+											<i class="glyphicon glyphicon-fast-backward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink>
+									</li>
+									<li class="paginate_button #{(livroController.currentPage gt 1 and livroController.totalPages gt 1) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{livroController.paginarAnterior()}"
+											disabled="#{!(livroController.currentPage gt 1 and livroController.totalPages gt 1)}">
+											<i class="glyphicon glyphicon-backward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink>
+									</li>
+										
+								</ul>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+								<h:outputText value="Página" />
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+								<h:inputText id="currentPageFooter" value="#{livroController.currentPage}"
+									size="3" autocomplete="off" styleClass="form-control"
+									onkeypress="if (event.keyCode == 13) {$('#LivroListForm\\:datalist\\:paginar').click(); return true;}" />
+								<h:commandLink id="paginar" action="#{livroController.pesquisar}" style="display:none">
+											<f:ajax execute="currentPageFooter" render="@form" />
+										</h:commandLink>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+								<h:outputText value="de #{livroController.totalPages}" />
+							</div>
+
+							<div style="display: inline-block; vertical-align: middle;">
+								<ul class="pagination" style="float: left; margin-right: 10px">
+									<li class="paginate_button #{(livroController.currentPage lt livroController.totalPages) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{livroController.paginarProxima()}"
+											disabled="#{!(livroController.currentPage lt livroController.totalPages)}">
+											<i class="glyphicon glyphicon-forward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink></li>
+									<li class="paginate_button #{(livroController.currentPage lt livroController.totalPages) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{livroController.paginarUltima()}"
+											disabled="#{!(livroController.currentPage lt livroController.totalPages)}">
+											<i class="glyphicon glyphicon-fast-forward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink></li>
+								</ul>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+								<h5><small>&nbsp;#{livroController.totalRows} resultados encontrados</small></h5>
+							</div>
+						</h:panelGroup>
+					</f:facet>
+
+				</h:dataTable>
+			</div>
+			
+			
+
+
+		</h:form>
+		
+
+
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      >
+
+    <ui:composition>
+
+        <h:panelGroup id="myModalContent" layout="block" styleClass="modal-dialog">
+		    
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <h:outputText styleClass="h4 modal-title" value="Dados básicos do livro" />
+		        </div>
+		        <div class="modal-body">
+		        	<h:panelGroup layout="block" styleClass="col-sm-12">
+			        	<h:outputLabel styleClass="control-label col-sm-2" value="Título:" />
+			        	<h:panelGroup layout="block" styleClass="col-sm-10">
+				        	<h:outputText styleClass="form-control-static" value="#{livroController.selected.titulo}" />
+			        	</h:panelGroup>
+		        	</h:panelGroup>
+		        	
+		        	<h:panelGroup layout="block" styleClass="col-sm-12">
+			        	<h:outputLabel styleClass="control-label col-sm-2" value="Isbn:" />
+			        	<h:panelGroup layout="block" styleClass="col-sm-10">
+				        	<h:outputText styleClass="form-control-static" value="#{livroController.selected.isbn}" />
+			        	</h:panelGroup>
+		        	</h:panelGroup>
+		        	
+		        	<h:panelGroup layout="block" styleClass="col-sm-12">
+			        	<h:outputLabel styleClass="control-label col-sm-2" value="Desde:" />
+			        	<h:panelGroup layout="block" styleClass="col-sm-10">
+				        	<h:outputText styleClass="form-control-static" value="#{livroController.selected.criacao.time}">
+				        		<f:convertDateTime locale="pt-BR" pattern="dd/MM/yyyy HH:mm:ss" />
+				        	</h:outputText>
+			        	</h:panelGroup>
+		        	</h:panelGroup>
+		        	
+		        	<div class="h6" style="text-align: right">Atualizado em: 
+			        	<h:outputText value="#{livroController.selected.atualizacao.time}">
+			        		<f:convertDateTime locale="pt-BR" pattern="dd/MM/yyyy HH:mm:ss" />
+			        	</h:outputText>
+		        	</div>
+		        	
+		        </div>
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+		        </div>
+		      </div>
+		      
+		  	</h:panelGroup>
+
+    </ui:composition>
+</html>

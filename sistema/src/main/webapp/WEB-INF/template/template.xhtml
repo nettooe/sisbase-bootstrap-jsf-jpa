@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="X-UA-Conpatible" content="IE=edge" />
+
+	<h:outputStylesheet library="css" name="bootstrap.min.css" />
+	<h:outputScript library="js" name="jsfcrud.js" />
+	<h:outputScript library="js" name="loader.js" />
+	
+
+	<title><ui:insert name="title">Default Title</ui:insert></title>
+	
+	<style>
+		ul.pagination{
+ 			margin: 0px; 
+		}
+		td.verticalAlignMiddle {
+			vertical-align: middle !important;
+		}
+	</style>
+	
+</h:head>
+
+<h:body>
+	<div class="container">
+
+		<ui:include src="menuPrincipal.xhtml"></ui:include>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<h:messages id="growl" style=" list-style-type: none;"
+					errorClass="alert alert-danger" infoClass="alert alert-success"
+					fatalClass="alert alert-danger" warnClass="alert alert-warning"
+					globalOnly="true" />
+
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<ui:insert name="body" />
+			</div>
+		</div>
+
+		<div class="footer">
+			<ui:insert name="footer" />
+		</div>
+
+	</div>
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</h:body>
+
+</html>

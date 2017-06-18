@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+	<nav class="navbar navbar-default">
+	<div class="container-fluid">
+
+		<h:outputText value="#{nomeTela}" styleClass="navbar-brand pull-left" />
+			
+		<ul class="nav navbar-nav pull-right">
+		
+			<li style="#{inibePesquisar ? 'display: none' : ''}">
+				<h:commandLink id="btPesquisar"
+					styleClass="btn btn-default"
+					action="#{livroController.pesquisar}"
+					actionListener="#{livroController.setCurrentPage(vs.index)}">
+					<i class="glyphicon glyphicon-search" style="padding-right:5px"></i>Pesquisar
+					<f:ajax render="datalist MessagesLivroListForm" execute="@form" />
+					</h:commandLink>
+			</li>
+			
+			
+			<li style="#{inibeNovo ? 'display: none' : ''}">
+				<h:commandLink id="btNovo"
+					styleClass="btn btn-default"
+					action="novo?faces-redirect=true">
+					<i class="glyphicon glyphicon-plus" style="padding-right:5px"></i>Novo
+					<f:ajax render="@form" execute="@form" />
+				</h:commandLink>
+			</li>
+			
+			<li style="#{inibeGravar ? 'display: none' : ''}">
+				<h:commandLink id="btGravar"
+					styleClass="btn btn-default"
+					actionListener="#{livroController.gravar()}"
+					onclick="$(this).addClass('disabled'); setTimeout('this.disabled = true;', 50);" >
+						<i class="glyphicon glyphicon-save" style="padding-right:5px"></i>Gravar
+						<f:ajax render="@form" execute="@form"  />
+				</h:commandLink>
+			</li>
+					
+			<li style="#{inibeCancelar ? 'display: none' : ''}">
+				<h:commandLink id="btCancelar"
+					styleClass="btn btn-default"
+					action="List?faces-redirect=true" immediate="true">
+					<i class="glyphicon glyphicon-ban-circle" style="padding-right:5px"></i>Cancelar
+					<f:ajax render="@form" execute="@form" />
+				</h:commandLink>
+			</li>
+					
+			<li style="#{inibeExcluir ? 'display: none' : ''}">
+				<h:commandLink id="btExcluir"
+					styleClass="btn btn-default #{empty livroController.selected.id ? 'disabled' : ''}"
+					action="#{livroController.excluirSelecionado()}"
+					onclick="return confirm('Tem certeza que deseja excluir?');">
+					<i class="glyphicon glyphicon-minus" style="padding-right:5px"></i>Excluir
+					<f:ajax render="@form" execute="@form" />
+				</h:commandLink>
+			</li>
+			
+			<li style="display:none;">
+				<h:commandLink id="generateButton"
+					styleClass="btn btn-default"
+					action="#{geradorController.gerar}">
+					<i class="glyphicon glyphicon-edit" style="padding-right:5px"></i>Gerar Automaticamente
+				</h:commandLink>
+			</li>
+
+		</ul>
+	</div>
+	</nav>
+
+	<script type="text/javascript">
+
+		function showModalVisualizaLivro(data){
+			if (data.status == "success") {
+				$('#modalVisualizaLivro').modal('show')
+			}
+		}
+
+	</script>
+		
+		<!-- Modal de Visualização -->
+	<div class="modal fade" id="modalVisualizaLivro" role="dialog">
+		<ui:include src="/livro/view.xhtml" />
+	</div>
+
+	
+
+
+</html>

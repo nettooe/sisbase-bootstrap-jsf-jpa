@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="#{msg['ListAutorTitle']}"></h:outputText>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="AutorListForm">
+
+			<ui:include src="menu.xhtml">
+				<ui:param name="nomeTela" value="#{msg['PesquisarAutorTitle']}" />
+				
+				<ui:param name="inibeGravar" value="true" />
+				<ui:param name="inibeCancelar" value="true" />
+				<ui:param name="inibeExcluir" value="true" />
+			</ui:include>
+
+			<div>
+				<h:messages id="MessagesAutorListForm"
+					style=" list-style: none; padding-left:0;"
+					errorClass="alert alert-danger" infoClass="alert alert-success"
+					fatalClass="alert alert-danger" warnClass="alert alert-warning"
+					globalOnly="true" />
+			</div>
+
+			<div class="panel panel-default">
+
+				<div class="panel-body">
+					<div class="form-inline">
+						<div class="form-group">
+							<h:outputLabel value="Nome:" for="txtNome" />
+							<h:inputText value="#{autorController.entityPesquisar.nome}"
+								onkeyup="if (event.keyCode == 13) { $('#AutorListForm\\:btPesquisar').click() }"
+								label="Nome" alt="nome" id="txtNome" title="nome do autor"
+								styleClass="form-control" tabindex="0" />
+						</div>
+
+						<div class="form-group">
+							<h:outputLabel value="Email:" for="txtEmail" />
+							<h:inputText value="#{autorController.entityPesquisar.email}"
+								onkeypress="if (event.keyCode == 13) { $('#AutorListForm\\:btPesquisar').click() }"
+								label="Email" alt="email" id="txtEmail" title="email do autor"
+								styleClass="form-control" tabindex="1" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="table-responsive">
+
+				<h:dataTable columnClasses="verticalAlignMiddle, verticalAlignMiddle, verticalAlignMiddle, verticalAlignMiddle"
+					styleClass="table table-bordered table-striped table-hover"
+					id="datalist" value="#{autorController.items}" var="item">
+
+					<f:facet name="header">
+
+						<h:panelGroup styleClass="col-xs-12" style="text-align: center"
+							rendered="#{not empty autorController.items}">
+							<div style="display: inline-block; vertical-align: middle;">
+								<ul class="pagination" style="float: left; margin-right: 10px">
+									<li class="paginate_button #{(autorController.currentPage gt 1 and autorController.totalPages gt 1) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{autorController.paginarPrimeira()}"
+											disabled="#{!(autorController.currentPage gt 1 and autorController.totalPages gt 1)}">
+											<i class="glyphicon glyphicon-fast-backward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink>
+									</li>
+									<li class="paginate_button #{(autorController.currentPage gt 1 and autorController.totalPages gt 1) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{autorController.paginarAnterior()}"
+											disabled="#{!(autorController.currentPage gt 1 and autorController.totalPages gt 1)}">
+											<i class="glyphicon glyphicon-backward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink>
+									</li>
+										
+								</ul>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+									<h:outputText value="Página" />
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+									<h:inputText id="currentPageTop" value="#{autorController.currentPage}"
+										size="2" autocomplete="off" styleClass="form-control"
+										onkeypress="if (event.keyCode == 13) {$('#AutorListForm\\:datalist\\:paginarTop').click(); return true;}" />
+									<h:commandLink id="paginarTop" action="#{autorController.pesquisar}" style="display:none">
+												<f:ajax execute="currentPageTop" render="@form" />
+											</h:commandLink>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+									<h:outputText value="de #{autorController.totalPages}" />
+							</div>
+
+							<div style="display: inline-block; vertical-align: middle;">
+								<ul class="pagination" style="float: left; margin-right: 10px">
+									<li class="paginate_button #{(autorController.currentPage lt autorController.totalPages) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{autorController.paginarProxima()}"
+											disabled="#{!(autorController.currentPage lt autorController.totalPages)}">
+											<i class="glyphicon glyphicon-forward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink></li>
+									<li class="paginate_button #{(autorController.currentPage lt autorController.totalPages) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{autorController.paginarUltima()}"
+											disabled="#{!(autorController.currentPage lt autorController.totalPages)}">
+											<i class="glyphicon glyphicon-fast-forward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink></li>
+								</ul>
+							</div>
+
+							<div style="display: inline-block; vertical-align: middle;">
+								<f:ajax event="change" listener="#{autorController.pesquisar()}"
+									render="@form">
+									<h:selectOneMenu value="#{autorController.pageSize}"
+										styleClass="form-control" style="width: 80px;">
+										<f:selectItem itemLabel="10" itemValue="10" />
+										<f:selectItem itemLabel="20" itemValue="20" />
+										<f:selectItem itemLabel="50" itemValue="50" />
+										<f:selectItem itemLabel="100" itemValue="100" />
+										<f:selectItem itemLabel="500" itemValue="500" />
+									</h:selectOneMenu>
+								</f:ajax>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+								<h5><small>&nbsp;#{autorController.totalRows} resultados encontrados</small></h5>
+							</div>
+						</h:panelGroup>
+					</f:facet>
+
+					<h:column rendered="false">
+						<h:selectBooleanCheckbox />
+						<i class="glyphicon glyphicon-trash"></i>
+					</h:column>
+
+					<h:column rendered="false">
+						<f:facet name="header">
+							<h:outputText value="#{msg['ListAutorTitle_id']}" />
+						</f:facet>
+						<h:outputText value="#{item.id}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['ListAutorTitle_nome']}" />
+						</f:facet>
+						<h:outputText value="#{item.nome}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['ListAutorTitle_email']}" />
+						</f:facet>
+						<h:outputText value="#{item.email}" />
+					</h:column>
+					
+					<h:column>
+						<h:commandLink id="btEditar"
+							immediate="true"							
+							action="#{autorController.iniciarEdicao(item.id)}"
+							styleClass="btn btn-default" style="margin-right:.2em;">
+							<i class="glyphicon glyphicon-edit"></i>
+						</h:commandLink>
+						
+						<h:commandLink id="btModal"
+							action="#{autorController.setSelected(item)}"
+							 immediate="true" styleClass="btn btn-default">
+							<i class="glyphicon glyphicon-zoom-in"></i>
+							<f:ajax onevent="showModalVisualizaAutor" execute="@this" render="AutorListForm:myModalContent" />
+						</h:commandLink>
+						
+					</h:column>
+
+					<f:facet name="footer">
+						<h:panelGroup styleClass="col-xs-12" style="text-align: center"
+							rendered="#{not empty autorController.items}">
+							<div style="display: inline-block; vertical-align: middle;">
+								<ul class="pagination" style="float: left; margin-right: 10px">
+									<li class="paginate_button #{(autorController.currentPage gt 1 and autorController.totalPages gt 1) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{autorController.paginarPrimeira()}"
+											disabled="#{!(autorController.currentPage gt 1 and autorController.totalPages gt 1)}">
+											<i class="glyphicon glyphicon-fast-backward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink>
+									</li>
+									<li class="paginate_button #{(autorController.currentPage gt 1 and autorController.totalPages gt 1) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{autorController.paginarAnterior()}"
+											disabled="#{!(autorController.currentPage gt 1 and autorController.totalPages gt 1)}">
+											<i class="glyphicon glyphicon-backward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink>
+									</li>
+										
+								</ul>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+								<h:outputText value="Página" />
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+								<h:inputText id="currentPageFooter" value="#{autorController.currentPage}"
+									size="3" autocomplete="off" styleClass="form-control"
+									onkeypress="if (event.keyCode == 13) {$('#AutorListForm\\:datalist\\:paginar').click(); return true;}" />
+								<h:commandLink id="paginar" action="#{autorController.pesquisar}" style="display:none">
+											<f:ajax execute="currentPageFooter" render="@form" />
+										</h:commandLink>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+								<h:outputText value="de #{autorController.totalPages}" />
+							</div>
+
+							<div style="display: inline-block; vertical-align: middle;">
+								<ul class="pagination" style="float: left; margin-right: 10px">
+									<li class="paginate_button #{(autorController.currentPage lt autorController.totalPages) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{autorController.paginarProxima()}"
+											disabled="#{!(autorController.currentPage lt autorController.totalPages)}">
+											<i class="glyphicon glyphicon-forward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink></li>
+									<li class="paginate_button #{(autorController.currentPage lt autorController.totalPages) ? '' : 'disabled'}">
+										<h:commandLink actionListener="#{autorController.paginarUltima()}"
+											disabled="#{!(autorController.currentPage lt autorController.totalPages)}">
+											<i class="glyphicon glyphicon-fast-forward"></i>
+											<f:ajax execute="@this" render="@form" immediate="true" />
+										</h:commandLink></li>
+								</ul>
+							</div>
+							<div style="display: inline-block; vertical-align: middle;">
+								<h5><small>&nbsp;#{autorController.totalRows} resultados encontrados</small></h5>
+							</div>
+						</h:panelGroup>
+					</f:facet>
+
+				</h:dataTable>
+			</div>
+			
+			
+
+
+		</h:form>
+		
+		
+		
+		<script type="text/javascript">
+    
+    // Load the Visualization API and the piechart package.
+    google.charts.load('current', {'packages':['corechart']});
+      
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
+      
+    function drawChart() {
+        var jsonData = $.ajax({
+            url: "../rs/autoria/grafico",
+            dataType: "json",
+            async: false
+            }).responseText;
+            
+        // Create our data table out of JSON data loaded from server.
+        var data = new google.visualization.DataTable(jsonData);
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('table_div'));
+        chart.draw(data, {width: 400, height: 240});
+      }
+
+    </script>
+    
+    <div id="table_div"></div>
+sdfsd
+
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/WEB-INF/template/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="#{msg['ListUsuarioTitle']}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+        
+			<ui:include src="menu.xhtml"></ui:include>
+        
+            <h:form id="UsuarioListForm">
+        		
+        		<div>
+        			<h:outputText value="#{msg['ListUsuarioTitle']}" />
+        		</div>
+        		
+        		<div class="table-responsive">
+	        		<h:dataTable styleClass="table table-bordered table-striped table-hover" id="datalist" value="#{usuarioController.items}" var="item">
+
+						<f:ajax event="click" />
+						
+						<h:column rendered="false">
+                            <f:facet name="header">
+                                <h:outputText value="#{msg['ListUsuarioTitle_id']}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+						</h:column>
+
+                        <h:column>
+	                        <f:facet name="header">
+	                        	<h:outputText value="#{msg['ListUsuarioTitle_nome']}" />
+	                        </f:facet>
+	                        <h:commandLink action="/usuario/cad.xhtml">
+                            	<h:outputText value="#{item.nome}"/>
+								<f:param name="id" value="#{item.id}"/>
+							</h:commandLink>
+                        </h:column>
+                        
+                        <h:column>
+	                        <f:facet name="header">
+	                        	<h:outputText value="#{msg['ListUsuarioTitle_email']}" />
+	                        </f:facet>
+                            <h:outputText value="#{item.email}"/>
+                        </h:column>
+                        
+                        <f:facet name="footer"> </f:facet>
+                        
+                    </h:dataTable>
+                   </div>
+                
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+
+</html>

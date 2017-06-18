@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="#{msg['ListUsuarioTitle']}"></h:outputText>
+	</ui:define>
+
+	<ui:define name="body">
+
+		<ui:include src="menu.xhtml"></ui:include>
+
+		<h:form id="UsuarioCreateForm">
+
+			<h:panelGrid columns="1">
+
+				<div class="input-group">
+					<h:outputLabel value="#{msg['CreateUsuarioLabel_nome']}" for="nome"
+						title="NomeX" />
+					<h:inputText id="nome" label="nome" alt="nome"
+						styleClass="form-control"
+						value="#{usuarioController.selected.nome}"
+						title="#{msg['CreateUsuarioTitle_nome']}" />
+					<h:message for="nome" errorClass="alert-danger"
+						infoClass="alert-success" fatalClass="alert-danger"
+						warnClass="alert-warning" />
+				</div>
+
+				<div class="input-group">
+					<h:outputLabel value="#{msg['CreateUsuarioLabel_email']}"
+						for="email" />
+					<h:inputText id="email" styleClass="form-control"
+						value="#{usuarioController.selected.email}"
+						title="#{msg['CreateUsuarioTitle_email']}" />
+				</div>
+				<h:message for="email" errorClass="alert-danger"
+					infoClass="alert-success" fatalClass="alert-danger"
+					warnClass="alert-warning" />
+
+			</h:panelGrid>
+
+			<div class="btn-group" role="group" aria-label="...">
+				<h:commandButton actionListener="#{usuarioController.create()}"
+					styleClass="btn btn-primary" value="#{msg['Save']}"
+					update="display,:UsuarioListForm:datalist,:growl"
+					oncomplete="handleSubmit(args,'UsuarioCreateDialog');" />
+				<h:commandButton value="#{msg['Cancel']}" styleClass="btn"
+					onclick="UsuarioCreateDialog.hide()" />
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
