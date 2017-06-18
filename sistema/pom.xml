@@ -16,12 +16,6 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.jboss.weld.servlet</groupId>
-			<artifactId>weld-servlet</artifactId>
-			<version>2.4.3.Final</version>
-		</dependency>
-
-		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
 			<version>2.2.13</version>
@@ -37,13 +31,6 @@
 			<groupId>br.com.sistema</groupId>
 			<artifactId>sistema-repository</artifactId>
 			<version>1.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
-			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>

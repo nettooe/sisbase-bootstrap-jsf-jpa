@@ -8,6 +8,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class AbstractRepository<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -26,25 +27,27 @@ public abstract class AbstractRepository<T> implements Serializable {
 		return em;
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	// protected abstract EntityManager getEntityManager();
+
+//	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void create(T entity) {
 		getEntityManager().persist(entity);
 		getEntityManager().flush();
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+//	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public T edit(T entity) {
 		T merge = getEntityManager().merge(entity);
 		getEntityManager().flush();
 		return merge;
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+//	@TransactionAttribute(TransactionAttributeType.MANDATORY)
 	public void remove(T entity) {
 		getEntityManager().remove(getEntityManager().merge(entity));
 	}
 
-//	 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+//	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public T find(Object id) {
 		return getEntityManager().find(entityClass, id);
 	}

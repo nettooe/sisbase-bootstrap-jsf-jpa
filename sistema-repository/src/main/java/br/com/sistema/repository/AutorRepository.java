@@ -8,6 +8,8 @@ package br.com.sistema.repository;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -22,7 +24,7 @@ import br.com.sistema.repository.modelo.Autor;
  *
  * @author oliver
  */
-//@TransactionManagement(TransactionManagementType.BEAN)
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class AutorRepository extends AbstractRepository<Autor> {
 	private static final long serialVersionUID = 1L;
 
